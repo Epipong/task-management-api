@@ -23,4 +23,12 @@ describe('TasksService', () => {
     expect(tasks).toBeDefined();
     expect(tasks.length).toBeGreaterThanOrEqual(0);
   });
+
+  it('should create a task', async () => {
+    const newTask = { name: 'Learn Python' };
+    const createdTask = await service.create(newTask);
+    expect(createdTask).toBeDefined();
+    expect(createdTask.name).toEqual('Learn Python');
+    expect(createdTask.id).toBeDefined();
+  });
 });
