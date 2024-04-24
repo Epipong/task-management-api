@@ -13,7 +13,7 @@ export class TasksService {
   }
 
   async findAll(): Promise<[Task[], number]> {
-    return this.tasksRepository.findMany({ queryType: 'findAndCount' });
+    return this.tasksRepository.findMany();
   }
 
   findOne(id: number) {

@@ -13,62 +13,8 @@ export abstract class BaseRepository<T> {
     return this.prisma[this.getEntity()].findUnique({ where });
   }
 
-  async findMany({
-    where = {},
-    limit,
-    offset = 0,
-    include,
-    orderBy,
-    cursor,
-    select,
-    queryType = 'find',
-  }: {
-    where?: { [key: string]: unknown };
-    limit?: number;
-    offset?: number;
-    include?: { [key: string]: unknown };
-    orderBy?: unknown;
-    cursor?: unknown;
-    select?: unknown;
-    queryType?: 'find' | 'count' | 'findAndCount';
-  } = {}): Promise<[T[] | undefined, number | undefined]> {
-    const params = {
-      where,
-      take: limit,
-      skip: offset,
-      include,
-      orderBy,
-      cursor,
-      select,
-    };
-
-    const shouldExecuteFirstQuery =
-      queryType === 'find' || queryType === 'findAndCount';
-    const shouldExecuteSecondQuery =
-      queryType === 'count' || queryType === 'findAndCount';
-
-    const firstQueryPromise = shouldExecuteFirstQuery
-      ? this.prisma[this.getEntity()].findMany(params)
-      : null;
-
-    const secondQueryPromise = shouldExecuteSecondQuery
-      ? this.prisma[this.getEntity()].count({ where })
-      : null;
-
-    if (shouldExecuteFirstQuery && shouldExecuteSecondQuery) {
-      return await this.prisma.$transaction([
-        firstQueryPromise,
-        secondQueryPromise,
-      ]);
-    }
-
-    if (shouldExecuteFirstQuery) {
-      return [await firstQueryPromise, undefined];
-    }
-
-    if (shouldExecuteSecondQuery) {
-      return [null, await secondQueryPromise];
-    }
+  async findMany(): Promise<[T[] | undefined, number | undefined]> {
+    return this.prisma[this.getEntity()].findMany();
   }
 
   async groupBy({ groupBy, where }: { groupBy: string[]; where: unknown }) {
@@ -87,29 +33,6 @@ export abstract class BaseRepository<T> {
       where: { id },
       data,
     });
-  }
-
-  async upsert({
-    id,
-    data,
-    include,
-  }: {
-    id?: number;
-    data: unknown;
-    include?: unknown;
-  }): Promise<T | undefined> {
-    if (id) {
-      return await this.prisma[this.getEntity()].update({
-        where: { id },
-        data,
-        include,
-      });
-    } else {
-      return await this.prisma[this.getEntity()].create({
-        data,
-        include,
-      });
-    }
   }
 
   async delete(id: number): Promise<T | undefined> {

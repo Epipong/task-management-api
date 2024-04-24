@@ -19,8 +19,7 @@ describe('TasksService', () => {
   });
 
   it('should get the tasks', async () => {
-    const [tasks, count] = await service.findAll();
-    expect(count).toBeGreaterThanOrEqual(0);
+    const tasks = await service.findAll();
     expect(tasks).toBeDefined();
     expect(tasks.length).toBeGreaterThanOrEqual(0);
   });
