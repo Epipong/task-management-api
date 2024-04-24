@@ -19,8 +19,8 @@ export class UsersService {
     return this.usersRepository.create({ data: newUser });
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll(): Promise<User[]> {
+    return this.usersRepository.findMany();
   }
 
   findOne(id: number) {
