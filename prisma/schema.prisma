@@ -15,9 +15,22 @@ datasource db {
 }
 
 model Task {
-  id Int @id @default(autoincrement())
-  name String
+  id    Int @id @default(autoincrement())
+  name  String
 
   @@index([id], map: "task_id_index")
   @@map("task")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  username  String    @db.VarChar(64) @unique
+  email     String    @unique
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  role      Int
+  password  String    @db.Char(64)
+
+  @@index([id], map: "user_id_index")
+  @@map("user")
 }
