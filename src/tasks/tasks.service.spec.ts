@@ -48,4 +48,12 @@ describe('TasksService', () => {
     });
     expect(updatedTask.name).not.toEqual('Learn Rust');
   });
+
+  it('should delete a task by id given', async () => {
+    const newTask = { name: 'Learn Rust' };
+    const createdTask = await service.create(newTask);
+    await service.remove(createdTask.id);
+    const tasks = await service.findAll();
+    expect(tasks.length).toEqual(0);
+  })
 });

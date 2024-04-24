@@ -20,11 +20,11 @@ export class TasksService {
     return this.tasksRepository.findOne(id);
   }
 
-  async update(id: number, updateTaskDto: UpdateTaskDto) {
+  async update(id: number, updateTaskDto: UpdateTaskDto): Promise<Task> {
     return this.tasksRepository.update(id, updateTaskDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+  async remove(id: number): Promise<Task> {
+    return this.tasksRepository.delete(id);
   }
 }
