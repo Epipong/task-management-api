@@ -19,19 +19,22 @@ export class UsersService {
     return this.usersRepository.create({ data: newUser });
   }
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<User[] | undefined> {
     return this.usersRepository.findMany();
   }
 
-  async findOne(id: number): Promise<User> {
+  async findOne(id: number): Promise<User | undefined> {
     return this.usersRepository.findOne(id);
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(
+    id: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<User | undefined> {
     return this.usersRepository.update(id, updateUserDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number): Promise<User | undefined> {
+    return this.usersRepository.delete(id);
   }
 }

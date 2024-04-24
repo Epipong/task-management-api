@@ -8,23 +8,26 @@ import { TasksRepository } from 'src/repositories/tasks.repository';
 export class TasksService {
   constructor(private tasksRepository: TasksRepository) {}
 
-  async create(createTaskDto: CreateTaskDto): Promise<Task> {
+  async create(createTaskDto: CreateTaskDto): Promise<Task | undefined> {
     return this.tasksRepository.create({ data: createTaskDto });
   }
 
-  async findAll(): Promise<Task[]> {
+  async findAll(): Promise<Task[] | undefined> {
     return this.tasksRepository.findMany();
   }
 
-  async findOne(id: number): Promise<Task> {
+  async findOne(id: number): Promise<Task | undefined> {
     return this.tasksRepository.findOne(id);
   }
 
-  async update(id: number, updateTaskDto: UpdateTaskDto): Promise<Task> {
+  async update(
+    id: number,
+    updateTaskDto: UpdateTaskDto,
+  ): Promise<Task | undefined> {
     return this.tasksRepository.update(id, updateTaskDto);
   }
 
-  async remove(id: number): Promise<Task> {
+  async remove(id: number): Promise<Task | undefined> {
     return this.tasksRepository.delete(id);
   }
 }

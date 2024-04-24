@@ -55,5 +55,5 @@ describe('TasksService', () => {
     await service.remove(createdTask.id);
     const tasks = await service.findAll();
     expect(tasks.length).toEqual(0);
-  })
+  });
 });
