@@ -41,4 +41,16 @@ describe('UsersService', () => {
     const users = await service.findAll();
     expect(users.length).toEqual(1);
   });
+
+  it("should get a user by id given", async () => {
+    const newUser = {
+      username: 'john.doe',
+      email: 'john.doe@club.com',
+      password: 'Password@1',
+      repeatPassword: 'Password@1'
+    };
+    const createdUser = await service.create(newUser);
+    const searchedUser = await service.findOne(createdUser.id);
+    expect(searchedUser.username).toEqual('john.doe');
+  });
 });

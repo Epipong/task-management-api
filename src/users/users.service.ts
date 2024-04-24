@@ -23,8 +23,8 @@ export class UsersService {
     return this.usersRepository.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    return this.usersRepository.findOne(id);
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
