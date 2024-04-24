@@ -8,13 +8,15 @@ import { User } from '@prisma/client';
 export class UsersService {
   constructor(private usersRepository: UsersRepository) {}
 
-  create(createUserDto: CreateUserDto): Promise<User> {
-    const user = {
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const newUser = {
       username: createUserDto.username,
       email: createUserDto.email,
-      password: createUserDto.password
+      password: createUserDto.password,
+      role: createUserDto.role
     }
-    return this.usersRepository.create({ data: user });
+
+    return this.usersRepository.create({ data: newUser });
   }
 
   findAll() {

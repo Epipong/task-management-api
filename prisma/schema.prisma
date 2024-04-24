@@ -24,12 +24,12 @@ model Task {
 
 model User {
   id        Int       @id @default(autoincrement())
-  username  String    @db.VarChar(64) @unique
+  username  String    @unique
   email     String    @unique
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   role      Role      @default(USER)
-  password  String    @db.Char(64)
+  password  String
 
   @@index([id], map: "user_id_index")
   @@map("user")

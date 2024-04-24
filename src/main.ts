@@ -2,12 +2,14 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { useContainer } from 'class-validator';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, {
     cors: false,
   });
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
+  app.useGlobalPipes(new ValidationPipe());
 
   const PORT = Number(process.env.PORT) || 3000;
 
