@@ -14,15 +14,15 @@ export class TasksService {
     if (errors.length > 0) {
       throw new BadRequestException('Validation failed');
     }
-    return this.tasksRepository.create({data: createTaskDto})
+    return this.tasksRepository.create({ data: createTaskDto });
   }
 
-  async findAll(): Promise<[Task[], number]> {
+  async findAll(): Promise<Task[]> {
     return this.tasksRepository.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
+  async findOne(id: number): Promise<Task> {
+    return this.tasksRepository.findOne(id);
   }
 
   update(id: number, updateTaskDto: UpdateTaskDto) {

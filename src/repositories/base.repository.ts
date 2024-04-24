@@ -13,7 +13,7 @@ export abstract class BaseRepository<T> {
     return this.prisma[this.getEntity()].findUnique({ where });
   }
 
-  async findMany(): Promise<[T[] | undefined, number | undefined]> {
+  async findMany(): Promise<T[] | undefined> {
     return this.prisma[this.getEntity()].findMany();
   }
 
