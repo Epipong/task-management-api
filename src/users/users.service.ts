@@ -13,8 +13,8 @@ export class UsersService {
       username: createUserDto.username,
       email: createUserDto.email,
       password: createUserDto.password,
-      role: createUserDto.role
-    }
+      role: createUserDto.role,
+    };
 
     return this.usersRepository.create({ data: newUser });
   }
@@ -23,12 +23,12 @@ export class UsersService {
     return this.usersRepository.findMany();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<User> {
     return this.usersRepository.findOne(id);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    return this.usersRepository.update(id, updateUserDto);
   }
 
   remove(id: number) {

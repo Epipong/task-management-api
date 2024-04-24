@@ -1,4 +1,19 @@
-import { IsEmail, IsOptional, IsString, IsStrongPassword, ValidateIf } from "class-validator";
+import { Role } from '@prisma/client';
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  IsStrongPassword,
+  ValidateIf,
+} from 'class-validator';
+
+const STRONG_PASSWORD_RULE = {
+  minLength: 8,
+  minLowercase: 1,
+  minNumbers: 1,
+  minSymbols: 1,
+  minUppercase: 1,
+}
 
 export class CreateUserDto {
   @IsString()
@@ -8,24 +23,12 @@ export class CreateUserDto {
   email: string;
 
   @IsOptional()
-  role?: string;
+  role?: Role;
 
-  @IsStrongPassword({
-    minLength: 8,
-    minLowercase: 1,
-    minNumbers: 1,
-    minSymbols: 1,
-    minUppercase: 1
-  })
+  @IsStrongPassword(STRONG_PASSWORD_RULE)
   password: string;
 
-  @IsStrongPassword({
-    minLength: 8,
-    minLowercase: 1,
-    minNumbers: 1,
-    minSymbols: 1,
-    minUppercase: 1
-  })
+  @IsStrongPassword(STRONG_PASSWORD_RULE)
   @ValidateIf((o) => o.password !== o.repeatPassword)
   repeatPassword: string;
 }
