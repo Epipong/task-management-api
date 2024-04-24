@@ -39,4 +39,13 @@ describe('TasksService', () => {
     expect(task).toBeDefined();
     expect(task.name).toEqual('Learn Rust');
   });
+
+  it('should update a task by id given', async () => {
+    const newTask = { name: 'Learn Rust' };
+    const createdTask = await service.create(newTask);
+    const updatedTask = await service.update(createdTask.id, {
+      name: 'Learn Go',
+    });
+    expect(updatedTask.name).not.toEqual('Learn Rust');
+  });
 });

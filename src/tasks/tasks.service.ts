@@ -20,8 +20,8 @@ export class TasksService {
     return this.tasksRepository.findOne(id);
   }
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
-    return updateTaskDto;
+  async update(id: number, updateTaskDto: UpdateTaskDto) {
+    return this.tasksRepository.update(id, updateTaskDto);
   }
 
   remove(id: number) {

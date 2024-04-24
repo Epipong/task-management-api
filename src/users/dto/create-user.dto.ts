@@ -13,7 +13,7 @@ const STRONG_PASSWORD_RULE = {
   minNumbers: 1,
   minSymbols: 1,
   minUppercase: 1,
-}
+};
 
 export class CreateUserDto {
   @IsString()
