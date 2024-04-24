@@ -28,9 +28,14 @@ model User {
   email     String    @unique
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
-  role      Int
+  role      Role      @default(USER)
   password  String    @db.Char(64)
 
   @@index([id], map: "user_id_index")
   @@map("user")
+}
+
+enum Role {
+  USER
+  ADMIN
 }
