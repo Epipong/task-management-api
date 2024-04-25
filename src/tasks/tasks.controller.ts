@@ -31,6 +31,7 @@ export class TasksController {
     return this.tasksService.findAll();
   }
 
+  @Roles(['ADMIN', 'USER'])
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.tasksService.findOne(+id);

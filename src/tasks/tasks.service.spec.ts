@@ -3,7 +3,6 @@ import { TasksService } from './tasks.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { TasksRepository } from 'src/repositories/tasks.repository';
 import { UsersRepository } from 'src/repositories/users.repertory';
-import { Task } from '@prisma/client';
 
 describe('TasksService', () => {
   let tasksRepository: TasksRepository;
