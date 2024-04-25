@@ -1,59 +1,66 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import user from 'src/fixtures/users';
 import { TasksService } from './tasks.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { TasksRepository } from 'src/repositories/tasks.repository';
+import { UsersRepository } from 'src/repositories/users.repertory';
+import { Task } from '@prisma/client';
 
 describe('TasksService', () => {
-  let service: TasksService;
+  let tasksRepository: TasksRepository;
+  let tasksService: TasksService;
+  let usersRepository: UsersRepository;
+  const prisma: PrismaService = global.prisma;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [PrismaService, TasksService, TasksRepository],
-    }).compile();
+    usersRepository = new UsersRepository(prisma)
+    tasksRepository = new TasksRepository(prisma)
+    tasksService = new TasksService(tasksRepository);
 
-    service = module.get<TasksService>(TasksService);
+    await prisma.user.create({
+      data: user
+    });
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(tasksService).toBeDefined();
   });
 
   it('should get all the tasks', async () => {
-    const tasks = await service.findAll();
+    const tasks = await tasksService.findAll();
     expect(tasks).toBeDefined();
     expect(tasks.length).toBeGreaterThanOrEqual(0);
   });
 
   it('should create a task', async () => {
-    const newTask = { name: 'Learn Python' };
-    const createdTask = await service.create(newTask);
+    const newTask = { name: 'Learn Python', userId: user.id };
+    const createdTask = await tasksService.create(newTask);
     expect(createdTask).toBeDefined();
     expect(createdTask.name).toEqual('Learn Python');
     expect(createdTask.id).toBeDefined();
   });
 
   it('should get a task by id given', async () => {
-    const newTask = { name: 'Learn Rust' };
-    const createdTask = await service.create(newTask);
-    const task = await service.findOne(createdTask.id);
+    const newTask = { name: 'Learn Rust', userId: user.id };
+    const createdTask = await tasksService.create(newTask);
+    const task = await tasksService.findOne(createdTask.id);
     expect(task).toBeDefined();
     expect(task.name).toEqual('Learn Rust');
   });
 
   it('should update a task by id given', async () => {
-    const newTask = { name: 'Learn Rust' };
-    const createdTask = await service.create(newTask);
-    const updatedTask = await service.update(createdTask.id, {
+    const newTask = { name: 'Learn Rust', userId: user.id };
+    const createdTask = await tasksService.create(newTask);
+    const updatedTask = await tasksService.update(createdTask.id, {
       name: 'Learn Go',
     });
     expect(updatedTask.name).not.toEqual('Learn Rust');
   });
 
   it('should delete a task by id given', async () => {
-    const newTask = { name: 'Learn Rust' };
-    const createdTask = await service.create(newTask);
-    await service.remove(createdTask.id);
-    const tasks = await service.findAll();
+    const newTask = { name: 'Learn Rust', userId: user.id };
+    const createdTask = await tasksService.create(newTask);
+    await tasksService.remove(createdTask.id);
+    const tasks = await tasksService.findAll();
     expect(tasks.length).toEqual(0);
   });
 });
