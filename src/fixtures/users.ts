@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 
-const user: User = {
+const user: Readonly<User> = {
   id: 1,
   email: 'john.doe@club.com',
   username: 'john.doe',

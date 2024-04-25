@@ -1,7 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CredentialDto } from './dto/credential.dto';
 import { UsersRepository } from 'src/repositories/users.repertory';
+import { comparePasswords } from 'src/utils/password';
 
 @Injectable()
 export class AuthService {
@@ -13,12 +14,16 @@ export class AuthService {
   async login(credential: CredentialDto) {
     const { email, password } = credential;
     const users = await this.usersRepository.findMany({
-      where: { email, password },
+      where: { email },
     });
     if (users.length === 0) {
-      throw new BadRequestException('email or password are invalid');
+      throw new NotFoundException('email not found');
     }
     const user = users[0];
+    const isMatch = await comparePasswords(password, user.password);
+    if (!isMatch) {
+      throw new BadRequestException('password is invalid');
+    }
     const payload = {
       username: user.username,
       sub: user.id,

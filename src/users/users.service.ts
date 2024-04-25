@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from 'src/repositories/users.repertory';
 import { User } from '@prisma/client';
+import { hashPassword } from 'src/utils/password';
 
 @Injectable()
 export class UsersService {
@@ -21,6 +22,7 @@ export class UsersService {
         'repeatPassword must be equal to password',
       ]);
     }
+    newUser.password = await hashPassword(password);
     return this.usersRepository.create({ data: newUser });
   }
 
@@ -36,6 +38,10 @@ export class UsersService {
     id: number,
     updateUserDto: UpdateUserDto,
   ): Promise<User | undefined> {
+    const { password } = updateUserDto;
+    if (password) {
+      updateUserDto.password = await hashPassword(password);
+    }
     return this.usersRepository.update(id, updateUserDto);
   }
 

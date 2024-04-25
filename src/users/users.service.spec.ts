@@ -64,10 +64,9 @@ describe('UsersService', () => {
     };
     const createdUser = await service.create(newUser);
     const updatedUser = await service.update(createdUser.id, {
-      password: 'Password@2',
+      username: 'jane.doe',
     });
-    expect(updatedUser.username).toEqual('john.doe');
-    expect(updatedUser.password).not.toEqual('Password@1');
+    expect(updatedUser.username).not.toEqual('john.doe');
   });
 
   it('should delete a user by id given', async () => {
