@@ -12,12 +12,12 @@ describe('TasksService', () => {
   const prisma: PrismaService = global.prisma;
 
   beforeEach(async () => {
-    usersRepository = new UsersRepository(prisma)
-    tasksRepository = new TasksRepository(prisma)
+    usersRepository = new UsersRepository(prisma);
+    tasksRepository = new TasksRepository(prisma);
     tasksService = new TasksService(tasksRepository);
 
     await prisma.user.create({
-      data: user
+      data: user,
     });
   });
 

@@ -25,7 +25,6 @@ export class TasksController {
     return this.tasksService.create(createTaskDto);
   }
 
-  @Roles(['ADMIN', 'USER'])
   @Get()
   findAll() {
     return this.tasksService.findAll();

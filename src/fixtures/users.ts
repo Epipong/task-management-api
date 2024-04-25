@@ -7,7 +7,7 @@ const user: User = {
   role: 'USER',
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-01-01'),
-  password: 'Password@1'
+  password: 'Password@1',
 };
 
 export default user;

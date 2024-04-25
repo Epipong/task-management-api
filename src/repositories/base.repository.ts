@@ -13,8 +13,33 @@ export abstract class BaseRepository<T> {
     return this.prisma[this.getEntity()].findUnique({ where });
   }
 
-  async findMany(): Promise<T[] | undefined> {
-    return this.prisma[this.getEntity()].findMany();
+  async findMany({
+    where = {},
+    limit,
+    offset = 0,
+    include,
+    orderBy,
+    cursor,
+    select,
+  }: {
+    where?: { [key: string]: unknown };
+    limit?: number;
+    offset?: number;
+    include?: { [key: string]: unknown };
+    orderBy?: unknown;
+    cursor?: unknown;
+    select?: unknown;
+  } = {}): Promise<T[] | undefined> {
+    const params = {
+      where,
+      take: limit,
+      skip: offset,
+      include,
+      orderBy,
+      cursor,
+      select,
+    };
+    return this.prisma[this.getEntity()].findMany(params);
   }
 
   async groupBy({ groupBy, where }: { groupBy: string[]; where: unknown }) {
