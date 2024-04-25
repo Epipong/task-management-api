@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from 'src/repositories/users.repertory';
@@ -15,6 +15,10 @@ export class UsersService {
       password: createUserDto.password,
       role: createUserDto.role,
     };
+    const { password, repeatPassword } = createUserDto;
+    if (password !== repeatPassword) {
+      throw new BadRequestException('Both passwords must be the same');
+    }
 
     return this.usersRepository.create({ data: newUser });
   }
