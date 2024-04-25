@@ -4,6 +4,7 @@ import { UsersService } from './users.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersRepository } from 'src/repositories/users.repertory';
 import { PrismaModule } from 'src/prisma/prisma.module';
+import { JwtService } from '@nestjs/jwt';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -11,7 +12,7 @@ describe('UsersController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [PrismaService, UsersService, UsersRepository],
+      providers: [PrismaService, UsersService, UsersRepository, JwtService],
       imports: [PrismaModule],
     }).compile();
 
