@@ -4,7 +4,6 @@ import {
   IsOptional,
   IsString,
   IsStrongPassword,
-  ValidateIf,
 } from 'class-validator';
 
 const STRONG_PASSWORD_RULE = {
@@ -29,6 +28,5 @@ export class CreateUserDto {
   password: string;
 
   @IsStrongPassword(STRONG_PASSWORD_RULE)
-  @ValidateIf((o) => o.password !== o.repeatPassword)
   repeatPassword: string;
 }

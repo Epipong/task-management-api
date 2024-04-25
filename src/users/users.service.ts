@@ -17,9 +17,10 @@ export class UsersService {
     };
     const { password, repeatPassword } = createUserDto;
     if (password !== repeatPassword) {
-      throw new BadRequestException('Both passwords must be the same');
+      throw new BadRequestException([
+        'repeatPassword must be equal to password',
+      ]);
     }
-
     return this.usersRepository.create({ data: newUser });
   }
 
