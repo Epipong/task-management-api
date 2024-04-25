@@ -5,10 +5,31 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { JwtService } from '@nestjs/jwt';
+import { PrometheusModule, makeCounterProvider, makeHistogramProvider } from 'nestjs-prometheus';
 
 @Module({
-  imports: [PrismaModule, TasksModule, UsersModule, AuthModule],
-  providers: [JwtService],
+  imports: [
+    PrismaModule,
+    TasksModule,
+    UsersModule,
+    AuthModule,
+    PrometheusModule.register({
+      defaultMetrics: {
+        enabled: true
+      }
+    })
+  ],
+  providers: [
+    JwtService,
+    makeHistogramProvider({
+      name: "histograme",
+      help: "histograme_help"
+    }),
+    makeCounterProvider({
+      name: "counter",
+      help: "counter_help",
+    })
+  ],
   controllers: [AuthController],
 })
 export class AppModule {}
