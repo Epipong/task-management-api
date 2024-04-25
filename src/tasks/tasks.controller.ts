@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
@@ -13,6 +14,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Roles } from 'src/roles/roles.decorator';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { User } from '@prisma/client';
 
 @UseGuards(JwtAuthGuard)
 @Controller('tasks')
@@ -21,14 +23,16 @@ export class TasksController {
 
   @Roles(['ADMIN', 'USER'])
   @Post()
-  create(@Body() createTaskDto: CreateTaskDto) {
-    return this.tasksService.create(createTaskDto);
+  create(@Body() createTaskDto: CreateTaskDto, @Request() req: { user: User }) {
+    const user: User = req.user;
+    return this.tasksService.create(user.id, createTaskDto);
   }
 
   @Roles(['ADMIN', 'USER'])
   @Get()
-  findAll() {
-    return this.tasksService.findAll();
+  findAll(@Request() req: { user: User }) {
+    const user: User = req.user;
+    return this.tasksService.findAll({ where: { userId: user.id } });
   }
 
   @Roles(['ADMIN', 'USER'])

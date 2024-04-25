@@ -31,24 +31,24 @@ describe('TasksService', () => {
   });
 
   it('should create a task', async () => {
-    const newTask = { name: 'Learn Python', userId: user.id };
-    const createdTask = await tasksService.create(newTask);
+    const newTask = { name: 'Learn Python' };
+    const createdTask = await tasksService.create(user.id, newTask);
     expect(createdTask).toBeDefined();
     expect(createdTask.name).toEqual('Learn Python');
     expect(createdTask.id).toBeDefined();
   });
 
   it('should get a task by id given', async () => {
-    const newTask = { name: 'Learn Rust', userId: user.id };
-    const createdTask = await tasksService.create(newTask);
+    const newTask = { name: 'Learn Rust' };
+    const createdTask = await tasksService.create(user.id, newTask);
     const task = await tasksService.findOne(createdTask.id);
     expect(task).toBeDefined();
     expect(task.name).toEqual('Learn Rust');
   });
 
   it('should update a task by id given', async () => {
-    const newTask = { name: 'Learn Rust', userId: user.id };
-    const createdTask = await tasksService.create(newTask);
+    const newTask = { name: 'Learn Rust' };
+    const createdTask = await tasksService.create(user.id, newTask);
     const updatedTask = await tasksService.update(createdTask.id, {
       name: 'Learn Go',
     });
@@ -56,8 +56,8 @@ describe('TasksService', () => {
   });
 
   it('should delete a task by id given', async () => {
-    const newTask = { name: 'Learn Rust', userId: user.id };
-    const createdTask = await tasksService.create(newTask);
+    const newTask = { name: 'Learn Rust' };
+    const createdTask = await tasksService.create(user.id, newTask);
     await tasksService.remove(createdTask.id);
     const tasks = await tasksService.findAll();
     expect(tasks.length).toEqual(0);

@@ -8,12 +8,19 @@ import { TasksRepository } from 'src/repositories/tasks.repository';
 export class TasksService {
   constructor(private tasksRepository: TasksRepository) {}
 
-  async create(createTaskDto: CreateTaskDto): Promise<Task | undefined> {
-    return this.tasksRepository.create({ data: createTaskDto });
+  async create(
+    userId: number,
+    createTaskDto: CreateTaskDto,
+  ): Promise<Task | undefined> {
+    return this.tasksRepository.create({ data: { ...createTaskDto, userId } });
   }
 
-  async findAll(): Promise<Task[] | undefined> {
-    return this.tasksRepository.findMany();
+  async findAll({
+    where = {},
+  }: {
+    where?: { [key: string]: unknown };
+  } = {}): Promise<Task[] | undefined> {
+    return this.tasksRepository.findMany({ where });
   }
 
   async findOne(id: number): Promise<Task | undefined> {

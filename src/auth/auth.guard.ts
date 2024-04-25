@@ -25,6 +25,7 @@ export class JwtAuthGuard implements CanActivate {
         secret: process.env.JWT_SECRET,
       });
       const user: User = decoded;
+      request.user = user;
       return !roles || roles.some((role) => user.role === role);
     } catch (error) {
       return false;
