@@ -8,6 +8,9 @@ import {
   Delete,
   Request,
   UseGuards,
+  BadRequestException,
+  NotFoundException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -23,15 +26,18 @@ export class TasksController {
 
   @Roles(['ADMIN', 'USER'])
   @Post()
-  create(@Body() createTaskDto: CreateTaskDto, @Request() req: { user: User }) {
-    const user: User = req.user;
+  async create(
+    @Body() createTaskDto: CreateTaskDto,
+    @Request() req: { user: User },
+  ) {
+    const user = req.user;
     return this.tasksService.create(user.id, createTaskDto);
   }
 
   @Roles(['ADMIN', 'USER'])
   @Get()
-  findAll(@Request() req: { user: User }) {
-    const user: User = req.user;
+  async findAll(@Request() req: { user: User }) {
+    const user = req.user;
     return this.tasksService.findAll({ where: { userId: user.id } });
   }
 
@@ -43,13 +49,30 @@ export class TasksController {
 
   @Roles(['ADMIN', 'USER'])
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.tasksService.update(+id, updateTaskDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateTaskDto: UpdateTaskDto,
+    @Request() req: { user: User },
+  ) {
+    const user = req.user;
+    return this.tasksService.update(+id, { ...updateTaskDto, userId: user.id });
   }
 
   @Roles(['ADMIN', 'USER'])
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string, @Request() req: { user: User }) {
+    const user = req.user;
+    
+    const tasks = await this.tasksService.findAll({
+      where: {
+        id,
+      },
+    });
+    if (!tasks || tasks.length === 0) {
+      throw new NotFoundException('Task not found');
+    } else if (tasks[0].userId !== user.id) {
+      throw new ForbiddenException('You cannot delete this task');
+    }
     return this.tasksService.remove(+id);
   }
 }

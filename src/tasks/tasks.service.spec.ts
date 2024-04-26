@@ -2,16 +2,13 @@ import user from 'src/fixtures/users';
 import { TasksService } from './tasks.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { TasksRepository } from 'src/repositories/tasks.repository';
-import { UsersRepository } from 'src/repositories/users.repertory';
 
 describe('TasksService', () => {
   let tasksRepository: TasksRepository;
   let tasksService: TasksService;
-  let usersRepository: UsersRepository;
   const prisma: PrismaService = global.prisma;
 
   beforeEach(async () => {
-    usersRepository = new UsersRepository(prisma);
     tasksRepository = new TasksRepository(prisma);
     tasksService = new TasksService(tasksRepository);
 
@@ -51,6 +48,7 @@ describe('TasksService', () => {
     const createdTask = await tasksService.create(user.id, newTask);
     const updatedTask = await tasksService.update(createdTask.id, {
       name: 'Learn Go',
+      userId: user.id,
     });
     expect(updatedTask.name).not.toEqual('Learn Rust');
   });
